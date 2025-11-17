@@ -4,18 +4,19 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jatin-jamdagni/fomo/server/stream-server/controllers"
+	"github.com/jatin-jamdagni/fomo/server/stream-server/routes"
 )
 
 func main() {
 	router := gin.Default()
 
-	router.GET("/", func(c *gin.Context) {
-		c.String(200, "Hello from fomo server")
+	router.GET("/health", func(c *gin.Context) {
+		c.String(200, "Hi, I'm healty")
 	})
 
-	router.GET("/movies", controllers.GetMovies())
-	router.GET("/movie/:imdb_id", controllers.GetMovie())
+	routes.SetupUnProtectedRoutes(router)
+
+	routes.SetupProtectedRoutes(router)
 
 	if err := router.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server", err)
